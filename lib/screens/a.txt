@@ -1,0 +1,252 @@
+key: eventForm.eventFormKey,
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 15),
+        child: Column(
+          children: [
+            const SizedBox(height: 30),
+            TextFormField(
+              autocorrect: false,
+              keyboardType: TextInputType.url,
+              onChanged: (value) => widget.tournamentServices.selectedTournament.link = value,
+              validator: (value){
+                if (value == null || value.isEmpty){
+                  return 'Este campo es obligatorio';
+                }
+              },
+              decoration: InputDecorations.petitionInputDecoration(
+                labeltext: 'Enlace del evento', 
+                hintText: 'start.gg/example-event',
+                prefixIcon: Icons.link
+              ),
+            ),
+            const SizedBox(height: 30),
+            CheckboxListTile(
+              value: !price, 
+              activeColor: AppTheme.primary,
+              title: const Text('Evento gratuito'),
+              onChanged: (value) {
+                setState(() {
+                  price = !price;
+                  widget.tournamentServices.selectedTournament.price = 'Gratis';
+                });
+              }
+            ),
+            price == true 
+            ? Column(
+              children: [
+                TextFormField(
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(
+                      RegExp(r'[0-9]+[.,]?[0-9]*')
+                    )
+                  ],
+                  autocorrect: false,
+                  keyboardType: TextInputType.number,
+                  enableInteractiveSelection: true,
+                  onChanged: (value) => widget.tournamentServices.selectedTournament.price = value,
+                  validator: (value){
+                    if (value == null || value.isEmpty){
+                      return 'Este campo es obligatorio';
+                    }
+                  },
+                  decoration: InputDecorations.petitionInputDecoration(
+                    labeltext: 'Precio del evento', 
+                    hintText: 'Ej.: \$5.00',
+                    prefixIcon: Icons.price_change
+                  ),
+                ),
+                const SizedBox(height: 30),
+              ],
+            )
+            : Container(),
+            CheckboxListTile(
+              value: online, 
+              activeColor: AppTheme.primary,
+              title: const Text('Evento en línea'),
+              onChanged: (value) {
+                setState(() {
+                  online = !online;
+                  _selectedRegion = _regionList[0];
+                  widget.tournamentServices.selectedTournament.region = 'Online';
+                });
+              }
+            ),
+            online == false 
+            ? Column(
+              children: [
+                DropdownButtonFormField(
+                  value: _selectedRegion,
+                  items: _regionList.map((e){
+                    return DropdownMenuItem(
+                      value: e,
+                      child: Text(e)
+                    );
+                  }).toList(), 
+                  onChanged: (value){
+                    setState(() {
+                      _selectedRegion = value as String;
+                      widget.tournamentServices.selectedTournament.region = _selectedRegion.toString();
+                    });
+                  },
+                  validator: (value){
+                    if(value == 'Seleccione un Estado: ') {
+                      return 'Este campo es obligatorio.';
+                    }
+                  } ,
+                ),
+                const SizedBox(height: 30),
+              ],
+            )
+            : Container(),
+            TextFormField(
+              autocorrect: false,
+              keyboardType: TextInputType.text,
+              onChanged: (value) => widget.tournamentServices.selectedTournament.requestedBy = value,
+              validator: (value){
+                if (value == null || value.isEmpty){
+                  return 'Este campo es obligatorio';
+                }
+              },
+              decoration: InputDecorations.petitionInputDecoration(
+                labeltext: 'Organizador(es) del evento', 
+                hintText: 'Ej.: Alguien Example',
+                prefixIcon: Icons.people_alt_rounded,
+              ),
+            ),
+            const SizedBox(height: 30),
+            TextFormField(
+              autocorrect: false,
+              maxLines: null,
+              maxLength: 500,
+              keyboardType: TextInputType.multiline,
+              onChanged: (value) => widget.tournamentServices.selectedTournament.description = value,
+              validator: (value){
+                if (value == null || value.isEmpty){
+                  return 'Este campo es obligatorio';
+                }
+              },
+              decoration: InputDecorations.petitionInputDecoration(
+                labeltext: 'Descripción del evento', 
+                hintText: 'Descripción breve',
+                prefixIcon: Icons.description_rounded
+              ),
+            ),
+            const SizedBox(height: 30),
+            Row(
+              children: [
+                Flexible(
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 5),
+                    child: TextFormField(
+                      controller: startDateController,
+                      readOnly: true,
+                      validator: (value){
+                        if (value == null || value.isEmpty){
+                          return 'Este campo es obligatorio';
+                        }
+                      },
+                      decoration: InputDecorations.petitionInputDecoration(
+                        labeltext: 'Inicia el', 
+                        hintText: 'Inicia el',
+                        prefixIcon: Icons.date_range_rounded,
+                      ),
+                      onTap: () async {
+                        DateTime? pickedDate = await dateSelector(context);
+                        if (pickedDate != null){
+                          TimeOfDay? pickedTime = await timeSelector(context);
+                          pickedTime ??= const TimeOfDay(hour: 0, minute: 0);
+                          String formatDate = DateFormat('yyyy/MM/dd').format(pickedDate);
+                          setState(() {
+                            startDateController.text = '${formatDate.toString()} ${pickedTime!.format(context).toString()}';
+                            widget.tournamentServices.selectedTournament.startDate = startDateController.text;
+                          });
+                        } else {
+                          print('No se seleccionó una fecha.');
+                        }
+                      },                        
+                    ),
+                  ),
+                ),
+                Flexible(
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 5),
+                    child: TextFormField(
+                      controller: endDateController,
+                      readOnly: true,
+                      validator: (value){
+                        if (value == null || value.isEmpty){
+                          return 'Este campo es obligatorio';
+                        }
+                      },
+                      decoration: InputDecorations.petitionInputDecoration(
+                        labeltext: 'Finaliza el', 
+                        hintText: 'Finaliza el',
+                        prefixIcon: Icons.date_range_rounded
+                      ),
+                      onTap: () async {
+                        DateTime? pickedDate = await dateSelector(context);
+                        if (pickedDate != null){
+                          TimeOfDay? pickedTime = await timeSelector(context);
+                          pickedTime ??= const TimeOfDay(hour: 0, minute: 0);
+                          String format = DateFormat('yyyy/MM/dd').format(pickedDate);
+                          setState(() {
+                            endDateController.text = '${format.toString()} ${pickedTime!.format(context).toString()}';
+                            widget.tournamentServices.selectedTournament.endDate = endDateController.text;
+                          });
+                        } else {
+                          print('No se seleccionó una fecha.');
+                        }
+                      },                    
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 50),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                MaterialButton(
+                  shape: const StadiumBorder(),
+                  padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
+                  minWidth: 0,
+                  onPressed: widget.tournamentServices.isSaving ? null : () async{
+                    if (!eventForm.isValidForm()) return;
+                    widget.tournamentServices.selectedTournament.uploadDate = now.toString();
+                    widget.tournamentServices.selectedTournament.status = false;
+                    await widget.tournamentServices.createEvent(widget.tournamentServices.selectedTournament);
+                    showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                       builder: (context){
+                        return AlertDialog(
+                          elevation: 5,
+                          title: const Text('¡Evento enviado!'),
+                          content: Container(
+                            child: const Text('Hemos recibido tu evento. Al ser verificado, se mostrará en la lista de eventos.')
+                          ),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                          actions: [
+                            TextButton(
+                              onPressed: (){
+                                refresh();
+                                Navigator.pop(context);
+                              }, 
+                              child: Text('Aceptar', style: TextStyle(color: AppTheme.primary))
+                            )
+                          ],
+                        );
+                       }
+                    );
+                  },
+                  color: AppTheme.primary,
+                  child: widget.tournamentServices.isSaving 
+                  ? CircularProgressIndicator(color: AppTheme.primary)
+                  : const Text('¡Enviar!', style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold))
+                ),
+                const SizedBox(height: 30),
+              ],
+            )
+          ],
+        ),
+      )

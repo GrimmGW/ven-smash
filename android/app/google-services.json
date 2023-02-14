@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "689926640001",
+    "project_id": "ven-smash",
+    "storage_bucket": "ven-smash.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:689926640001:android:ac7f8ac91142879d635880",
+        "android_client_info": {
+          "package_name": "com.grimmgw.ven_smash"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "689926640001-1h09ea03d02g832sp5gve4pf599qf8au.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.grimmgw.ven_smash",
+            "certificate_hash": "32560bd2f05bc217fee08d37ea7ca798b335a89e"
+          }
+        },
+        {
+          "client_id": "689926640001-j2avenc02jau3htpjerfsaua9me02eb5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAltgpbjJGNdi5FEoUfRrTaqNPEtrytEQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "689926640001-j2avenc02jau3htpjerfsaua9me02eb5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

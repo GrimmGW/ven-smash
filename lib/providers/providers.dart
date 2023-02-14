@@ -1,0 +1,1 @@
+export 'package:ven_smash/providers/tournaments_provider.dart';
